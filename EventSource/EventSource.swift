@@ -180,6 +180,9 @@ open class EventSource: NSObject, URLSessionDataDelegate {
                 self.onOpenCallback!()
             }
         }
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode > 399 {
+            onErrorCallback?(NSError.init(domain: "EventSource.error", httpResponse.statusCode, userInfo: nil))
+        }
     }
 
     open func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
