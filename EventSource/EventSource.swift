@@ -178,10 +178,11 @@ open class EventSource: NSObject, URLSessionDataDelegate {
         if self.onOpenCallback != nil {
             DispatchQueue.main.async {
                 self.onOpenCallback!()
+                 
             }
         }
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode > 399 {
-            onErrorCallback?(NSError.init(domain: "EventSource.error", httpResponse.statusCode, userInfo: nil))
+            onErrorCallback?(NSError.init(domain: "EventSource.error",code: httpResponse.statusCode, userInfo: nil))
         }
     }
 
