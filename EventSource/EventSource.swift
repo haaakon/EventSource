@@ -213,9 +213,13 @@ open class EventSource: NSObject, URLSessionDataDelegate {
         if self.hasHttpError(code: urlResponse.statusCode) {
             
             var errorDict : [String : Any] = ["statusCode": urlResponse.statusCode]
-            if let data = self.lastReceivedData, let dictionary = try? JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as? [String : Any], let actualDict = dictionary {
-                errorDict = errorDict.merging(actualDict) { (first, second) -> Any in
-                    return first
+            
+            if let data = self.lastReceivedData {
+                let dictionary = try? JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments)
+                if let dict = dictionary as? [String : Any] {
+                    errorDict = errorDict.merging(dict) { first, second in
+                        return first
+                    }
                 }
             }
             
